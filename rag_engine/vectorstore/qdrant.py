@@ -1,16 +1,19 @@
 import requests
 import json
 from typing import List, Dict, Any, Optional
-from config import QDRANT_URL, QDRANT_COLLECTION, EMBEDDING_DIM
+from config import QDRANT_URL, QDRANT_API_KEY, QDRANT_COLLECTION, EMBEDDING_DIM
 
 class QdrantRESTManager:
     """
     Direct HTTP REST client for Qdrant.
+    Supports both local Docker (no auth) and Qdrant Cloud (API key).
     Bypasses httpx/grpc socket initialization entirely on Windows for 100% instant reliability.
     """
     def __init__(self):
         self.base_url = QDRANT_URL.rstrip("/")
         self.session = requests.Session()
+        if QDRANT_API_KEY:
+            self.session.headers.update({"api-key": QDRANT_API_KEY})
         self._ensure_collection()
 
     def _ensure_collection(self):

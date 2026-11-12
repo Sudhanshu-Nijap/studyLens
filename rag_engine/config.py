@@ -10,6 +10,7 @@ load_dotenv(dotenv_path=env_path)
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") or os.getenv("VITE_GEMINI_API_KEY", "")
 QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
+QDRANT_API_KEY = os.getenv("QDRANT_API_KEY", "")
 QDRANT_COLLECTION = os.getenv("QDRANT_COLLECTION", "study_materials")
 POSTGREST_URL = os.getenv("POSTGREST_URL") or os.getenv("VITE_DB_URL", "http://localhost:8000")
 HOST = os.getenv("HOST", "0.0.0.0")
