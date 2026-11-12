@@ -1,0 +1,14 @@
+{
+  "name": "studylens-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix studylens run dev",
+    "rag": "python rag_engine/main.py",
+    "build": "npm --prefix studylens run build",
+    "preview": "npm --prefix studylens run preview",
+    "typecheck": "npm --prefix studylens run typecheck",
+    "lint": "npm --prefix studylens run lint"
+  }
+}
+
