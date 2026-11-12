@@ -1,0 +1,34 @@
+import { createJavaScriptRegexEngine } from "shiki/engine/javascript";
+import {
+  bundledLanguages,
+  type Highlighter,
+  type RegexEngine,
+  createHighlighter,
+} from "shiki/bundle/web";
+
+let jsEngine: RegexEngine | null = null;
+let highlighter: Promise<Highlighter> | null = null;
+
+export const Themes = {
+  light: "github-light",
+  dark: "github-dark",
+};
+
+const allBundledLanguageIds = Object.keys(bundledLanguages);
+
+const getJsEngine = (): RegexEngine => {
+  jsEngine ??= createJavaScriptRegexEngine();
+  return jsEngine;
+};
+
+const highlight = async (): Promise<Highlighter> => {
+  highlighter ??= createHighlighter({
+    langs: allBundledLanguageIds,
+    themes: ["github-light", "github-dark"],
+    engine: getJsEngine(),
+  });
+  return highlighter;
+};
+
+export { highlight };
+
