@@ -15,7 +15,7 @@ export function NotebookPage() {
   const navigate = useNavigate();
 
   const [notebook, setNotebook] = useState<StudyNotebook | null>(null);
-  const [viewer, setViewer] = useState<StudyUser>(previewViewer);
+  const [viewer, setViewer] = useState<StudyUser | null>(null);
   const [materials, setMaterials] = useState<Material[]>([]);
   const [conversations, setConversations] = useState<StudyConversation[]>([]);
   const [loading, setLoading] = useState(true);
@@ -29,41 +29,45 @@ export function NotebookPage() {
     }
 
     let active = true;
-    Promise.all([
-      getUser(),
-      getNotebook(id),
-      listMaterials(id),
-      listConversations(id),
-    ])
-      .then(([userContext, nb, matList, convList]) => {
+    getUser().then(async (userContext) => {
+      if (!active) return;
+      if (!userContext) {
+        navigate(`/auth/sign-in?next=/notebooks/${id}`);
+        return;
+      }
+      setViewer({ id: userContext.userId, displayName: userContext.email ?? "Student" });
+
+      try {
+        const [nb, matList, convList] = await Promise.all([
+          getNotebook(id),
+          listMaterials(id),
+          listConversations(id),
+        ]);
         if (!active) return;
         if (!nb) {
           setNotFound(true);
           setLoading(false);
           return;
         }
-        if (userContext) {
-          setViewer({ id: userContext.userId, displayName: userContext.email ?? "Student" });
-        }
         setNotebook(nb);
         setMaterials(matList);
         setConversations(convList);
         setLoading(false);
-      })
-      .catch((err) => {
+      } catch (err) {
         console.warn("Could not load notebook data:", err);
         if (active) {
           setNotFound(true);
           setLoading(false);
         }
-      });
+      }
+    });
 
     return () => {
       active = false;
     };
-  }, [id]);
+  }, [id, navigate]);
 
-  if (loading) {
+  if (loading || !viewer) {
     return (
       <div className="min-h-svh flex items-center justify-center bg-background text-muted-foreground">
         <div className="flex flex-col items-center gap-3">

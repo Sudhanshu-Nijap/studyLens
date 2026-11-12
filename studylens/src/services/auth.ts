@@ -23,7 +23,7 @@ export async function getUser(): Promise<AuthContext | null> {
 export async function requireUser(): Promise<{ userId: string; email: string }> {
   const ctx = await getUser();
   if (ctx) return { userId: ctx.userId, email: ctx.email };
-  return { userId: "00000000-0000-0000-0000-000000000001", email: "student@studylens.local" };
+  throw new Error("Authentication required. Please sign in.");
 }
 
 /** Sign in by email against Docker PostgreSQL users table */
