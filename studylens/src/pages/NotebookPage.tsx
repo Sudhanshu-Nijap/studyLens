@@ -6,7 +6,6 @@ import { listMaterials } from "@/services/materials";
 import { listConversations } from "@/services/chat";
 import { getUser } from "@/services/auth";
 import type { Material, StudyConversation, StudyNotebook, StudyUser } from "@/types";
-import { previewViewer } from "@/data/sampleNotebooks";
 import { Button } from "@/components/ui/button";
 import { BookOpenText } from "lucide-react";
 

@@ -180,18 +180,12 @@ export type LocalUser = {
 
 const STORAGE_KEY = "studylens_user";
 
-export const DEFAULT_DEV_USER: LocalUser = {
-  id: "00000000-0000-0000-0000-000000000001",
-  email: "student@studylens.local",
-  displayName: "StudyLens Student",
-};
-
-export function getLocalUser(): LocalUser {
+export function getLocalUser(): LocalUser | null {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) return JSON.parse(raw);
   } catch {}
-  return DEFAULT_DEV_USER;
+  return null;
 }
 
 export function setLocalUser(user: LocalUser | null) {
